@@ -1,53 +1,52 @@
-class Salesforceable
+def salesforceable_as (object_name, client_id: '', client_secret: '', fields_mapping: {})
 
-    require 'restforce'
+  send :define_method, 'is_synced_with_salesforce' do 
+    # Specific methods to ActiveRecord objects
+    self.salesforce_id != nil
+  end
 
-    CLIENT_ID = "3MVG9sG9Z3Q1RlbdYs9verSsP3ozsVYS7iinnYoPX_wY7odwR6_c2w1FOwmavvcE_86G6ZKGOuNl9TWMrbxd."
-    CLIENT_SECRET = "8612542553551939632"
-
-    FIELDS_MAPPING = {
-        'name' => 'FirstName',
-        'last_name' => 'LastName',
-        'email' => 'Email',
-        'company' => 'Company',
-        'job_title' => 'Title',
-        'phone' => 'Phone'
+  send :define_method, 'save_on_salesforce!' do |refresh_token, instance_url|
+    
+    connection_params = { 
+      :refresh_token => refresh_token, 
+      :instance_url  => instance_url, 
+      :client_id => client_id, 
+      :client_secret => client_secret
     }
 
-    def self.save_on_salesforce(object_name, model_object, refresh_token, instance_url)
+    salesforce_client = Restforce.new connection_params
+    salesforce_object_fields = {}
 
-        connection_params = { 
-          :refresh_token => refresh_token, 
-          :instance_url  => instance_url, 
-          :client_id => CLIENT_ID, 
-          :client_secret => CLIENT_SECRET
-        }
-
-        salesforce_client = Restforce.new connection_params
-        salesforce_object_fields = {}
-
-        FIELDS_MAPPING.each do |model_field, salesforce_field|
-            salesforce_object_fields[salesforce_field] = model_object[model_field]
-        end
-
-        salesfoce_object_id = salesforce_client.create!(object_name, salesforce_object_fields)
-        return salesfoce_object_id
-
+    fields_mapping.each do |model_field, salesforce_field|
+        salesforce_object_fields[salesforce_field] = self[model_field]
     end
 
-    def self.remove_from_salesforce(object_name, object_id, refresh_token, instance_url)
-
-        connection_params = { 
-          :refresh_token => refresh_token, 
-          :instance_url  => instance_url, 
-          :client_id => CLIENT_ID, 
-          :client_secret => CLIENT_SECRET
-        }
-
-        salesforce_client = Restforce.new connection_params
-
-        salesforce_client.destroy!('Lead', object_id)
-
-    end
+    salesfoce_object_id = salesforce_client.create!(object_name, salesforce_object_fields)
     
+    # Specific methods to ActiveRecord objects
+    self.salesforce_id = salesfoce_object_id
+    self.save!
+
+  end
+
+  send :define_method, 'remove_from_salesforce!' do |refresh_token, instance_url|
+    
+    connection_params = { 
+      :refresh_token => refresh_token, 
+      :instance_url  => instance_url, 
+      :client_id => client_id, 
+      :client_secret => client_secret
+    }
+
+    salesforce_client = Restforce.new connection_params
+
+    # Specific methods to ActiveRecord objects
+    salesforce_client.destroy!(object_name, self.salesforce_id)
+    self.salesforce_id = nil
+    self.save!
+
+  end
+
 end
+
+require 'restforce'
