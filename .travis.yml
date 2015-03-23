@@ -10,4 +10,6 @@ sudo: false
 
 cache: bundler
 
+before_install: "rm Gemfile.lock"
+
 before_script: "bundle update"
