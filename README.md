@@ -1,4 +1,7 @@
 # salesforceable
+
+[![Build Status](https://travis-ci.org/murilloflores/salesforceable.svg)](https://travis-ci.org/murilloflores/salesforceable)
+
 Salesforceable is a ruby gem that add 'save on salesforce' and 'remove from salesforce' functionality to Active Record's objects.
 It's first purpose is to help Rails developers to integrate with Salesforce by providing a easy to setup and use interface. Note that salesforceable does not provide any way to get the Salesforce user authentication OAuth information to use Salesforce API (refresh_token and instance_url) although this is needed to use the gem. Obtaining this information is up to the developer. We recommend using the 'omniauth-salesforce' ruby gem to do so. To learn more about Salesforce Omniauth authentication process visit [Digging Deeper into OAuth 2.0 on Force.com](https://developer.salesforce.com/page/Digging_Deeper_into_OAuth_2.0_on_Force.com).
 
