@@ -1,0 +1,15 @@
+language: ruby
+
+rvm:
+  - 2.2
+
+gemfile:
+  - Gemfile
+
+sudo: false
+
+cache: bundler
+
+before_install: "rm ${BUNDLE_GEMFILE}.lock"
+
+before_script: "bundle update"
