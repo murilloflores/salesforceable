@@ -78,11 +78,11 @@ class SalesforceableTest < Minitest::Test
     obj = MyClass.new()
     obj.salesforce_id = nil
     obj.save_called = false
-    obj.name = 'Zé da Silva'
+    obj.name = 'Ze da Silva'
     obj.email = 'ze@padaria.com'
     
     restforce_client_mock = Minitest::Mock.new
-    restforce_client_mock.expect(:create!, 'SALESFORCEID8888', ['Lead', { 'salesforce_name' => 'Zé da Silva', 'salesforce_email' => 'ze@padaria.com'}])
+    restforce_client_mock.expect(:create!, 'SALESFORCEID8888', ['Lead', { 'salesforce_name' => 'Ze da Silva', 'salesforce_email' => 'ze@padaria.com'}])
 
     mock_wrapper = lambda { |connection_params|
       assert_equal 'aa', connection_params[:client_id]
