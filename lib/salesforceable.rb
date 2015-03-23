@@ -1,6 +1,6 @@
 def salesforceable_as (object_name, client_id: '', client_secret: '', fields_mapping: {})
 
-  send :define_method, 'is_synced_with_salesforce' do 
+  send :define_method, 'is_synced_with_salesforce?' do 
     # Specific methods to ActiveRecord objects
     self.salesforce_id != nil
   end
